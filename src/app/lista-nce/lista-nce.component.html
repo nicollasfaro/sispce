@@ -1,0 +1,275 @@
+<div class="container mt-4">
+  <!-- Editar Curso -->
+  <div *ngIf="editingCourse" class="card mb-4" style="width: 100%">
+    <div class="card-header">
+      <h5 class="mb-0">Editar NCE</h5>
+    </div>
+    <div class="card-body">
+      <div class="form-group">
+        <label>Nº Ord</label>
+        <input
+          id="editCourseName"
+          [(ngModel)]="editingCourse.nceId"
+          class="form-control"
+          disabled="true"
+        />
+        <label>Posto/Perfil</label>
+        <select
+          class="form-control select"
+          [(ngModel)]="editingCourse.posto"
+        >
+        <option *ngFor="let posto of postos" [value]="posto"
+        >{{posto}}</option
+      >
+        </select>
+        <label for="editCourseName">Conhecimento Específico</label>
+        <input
+          id="editCourseName"
+          [(ngModel)]="editingCourse.conhecimentoEspacifico"
+          class="form-control"
+          placeholder="Digite o novo nome do curso"
+        />
+        <label for="editCourseName">Aplicação/PAC</label>
+        <input
+          id="editCourseName"
+          [(ngModel)]="editingCourse.aplicacaoPac"
+          class="form-control"
+          placeholder="Digite o novo nome do curso"
+        />
+      </div>
+      <button
+        class="btn btn-success mt-2"
+        (click)="updateCourse()"
+        style="margin-right: 5px"
+      >
+        Atualizar Curso
+      </button>
+      <button class="btn btn-secondary mt-2" (click)="editingCourse = null">
+        Cancelar
+      </button>
+    </div>
+  </div>
+
+  <div *ngIf="courses.length" class="card">
+    <div class="card-header">
+      <h5 class="mb-0">Lista de NCE's</h5>
+    </div>
+
+    <div class="card-body">
+      <div class="table-container">
+        <table width="100%">
+          <thead>
+            <tr>
+              <th>Nº Ord</th>
+              <th>Posto/Perfil</th>
+              <th>Conhecimento Específico</th>
+              <th>Aplicação/PAC</th>
+              <th>IES/Prio/Local</th>
+              <th>Ações</th>
+              <th>Status</th>
+              <!-- <th>Reordenar</th> -->
+            </tr>
+          </thead>
+          <tbody cdkDropList
+          (cdkDropListDropped)="drop($event)"
+          [cdkDropListData]="courses">
+            <tr *ngFor="let course of courses; let i = index" cdkDrag
+            [cdkDragData]="course">
+              <td style="text-align: center">
+                {{ course.nceId }}
+              </td>
+              <td style="text-align: center">
+                {{ course.posto }}
+              </td>
+              <td class="limitarTd">
+                {{ course.conhecimentoEspacifico }}
+              </td>
+              <td class="limitarTd">
+                {{ course.aplicacaoPac }}
+              </td>
+              <td class="limitarTd">
+                {{ course.ies }}
+              </td>
+              <td style="text-align: center; padding: 2px">
+                <div
+                  *ngIf="userRoles.includes('ROLE_BASIC') || userRoles.includes('ROLE_ADMIN')"
+                  class="btn-group"
+                  role="group"
+                  aria-label="Button group with nested dropdown"
+                >
+                  <button
+                  *ngIf="(userRoles.includes('ROLE_BASIC') || userRoles.includes('ROLE_ADMIN')) && course.status == null"
+                    type="button"
+                    class="btn btn-success"
+                    (click)="editCourse(course)"
+                  >
+                    <i class="far fa-edit"></i> Editar
+                  </button>
+                  <button
+                  *ngIf="(userRoles.includes('ROLE_BASIC') || userRoles.includes('ROLE_ADMIN')) && course.status == null"
+                    type="button"
+                    class="btn btn-danger"
+                    (click)="confirmDelete(course.nceId)"
+                  >
+                    <i class="far fa-trash-alt"></i> Deletar
+                  </button>
+
+                  <div class="btn-group" role="group">
+                    <button
+                      id="btnGroupDrop1"
+                      type="button"
+                      class="btn btn-secondary dropdown-toggle"
+                      data-bs-toggle="dropdown"
+                      aria-expanded="false"
+                    >
+                      Mais ações
+                    </button>
+                    <ul
+                      class="dropdown-menu"
+                      aria-labelledby="btnGroupDrop1"
+                      style="cursor: pointer"
+                    >
+                      <li>
+                        <a
+                          class="dropdown-item"
+                          (click)="openAddCandidateModal(course.nceId)"
+                          >Incluir Candidato</a
+                        >
+                      </li>
+                      <li *ngIf="userRoles.includes('ROLE_ADMIN')">
+                        <a class="dropdown-item" (click)="openUploadModal(course.nceId)"
+                          >Anexar documentos</a
+                        >
+                      </li>
+                      <li><hr class="dropdown-divider" /></li>
+                      <li>
+                        <a class="dropdown-item" (click)="viewNce(course.nceId)">Visualizar NCE</a>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+                <div
+                  *ngIf="userRoles.includes('ROLE_APROVADOR')"
+                  class="btn-group"
+                  role="group"
+                  aria-label="Button group with nested dropdown"
+                >
+                  <button
+                  *ngIf="course.status == null"
+                    type="button"
+                    class="btn btn-success"
+                    (click)="aprovarNce(course)"
+                  >
+                    Aprovar
+                  </button>
+                  <button
+                  *ngIf="course.status == null"
+                    type="button"
+                    class="btn btn-danger"
+                    
+                  >
+                    Reprovar
+                  </button>
+                  <button
+                  *ngIf="course.status == null"
+                    type="button"
+                    class="btn btn-warning"
+                    (click)="viewNce(course.nceId)"
+                  >
+                    Visualizar NCE
+                  </button>
+                </div>
+              </td>
+              <td>
+                {{ course.statusNce }}
+                <span *ngIf="course.statusNce == null">Em Análise</span>
+              </td>
+              <!-- <td>
+                <i class="fas fa-sort-alt"></i> Ord          
+              </td> -->
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <mat-paginator
+        [pageSizeOptions]="[5, 10, 20]"
+        [length]="courses.length"
+        showFirstLastButtons
+      ></mat-paginator>
+    </div>
+  </div>
+
+  <!-- Mensagem quando não há cursos -->
+  <div *ngIf="!courses.length" class="alert alert-info mt-4">
+    Nenhum curso disponível.
+  </div>
+</div>
+
+<!-- Modal para anexar documentos -->
+<div
+  class="modal fade"
+  id="uploadModal"
+  tabindex="-1"
+  role="dialog"
+  aria-labelledby="uploadModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog" role="document" id="uploadModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="uploadModalLabel">Anexar Documentos</h5>
+      </div>
+      <div class="modal-body">
+        <!-- Botão estilizado para abrir o seletor de arquivos -->
+        <button class="btn btn-primary" (click)="triggerFileInput()">
+          Selecionar Arquivos
+        </button>
+        <input
+          type="file"
+          (change)="onFileSelected($event)"
+          id="fileInput"
+          multiple
+          accept="application/pdf"
+          style="display: none"
+        />
+        <!-- Exibir lista de arquivos anexados -->
+        <ul class="list-group mt-3">
+          <li
+            *ngFor="let file of selectedFiles; let i = index"
+            class="list-group-item d-flex justify-content-between align-items-center"
+          >
+            {{ file.name }}
+            <button
+              type="button"
+              class="btn btn-danger btn-sm"
+              (click)="removeAttachment(i)"
+            >
+              Remover
+            </button>
+          </li>
+        </ul>
+        <!-- Exibir mensagem quando não há arquivos anexados -->
+        <div
+          *ngIf="selectedFiles.length === 0"
+          class="alert alert-warning mt-2"
+        >
+          Nenhum arquivo anexado.
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button
+          type="button"
+          class="btn btn-secondary"
+          data-bs-dismiss="modal"
+          (click)="clearFiles()"
+        >
+          Fechar
+        </button>
+        <button type="button" class="btn btn-primary" (click)="uploadFile(nceId)">
+          Enviar
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

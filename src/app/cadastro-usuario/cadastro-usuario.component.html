@@ -1,0 +1,105 @@
+<div class="container mt-4">
+  <div class="card">
+    <div class="card-header">
+      <h5 class="mb-0">Cadastrar Novo Usuário</h5>
+    </div>
+    <div class="card-body">
+      <form [formGroup]="userForm" (ngSubmit)="onSubmit()">
+        <div style="display: grid; margin-top: 10px">
+          <div
+            style="
+              display: inline-flex;
+              width: auto;
+              justify-content: space-between;
+            "
+          >
+            <mat-form-field>
+              <mat-label>Username</mat-label>
+              <input matInput formControlName="username" required />
+            </mat-form-field>
+
+            <mat-form-field style="width: 350px">
+              <mat-label>Organização Militar</mat-label>
+              <mat-select formControlName="organizacaoMilitar" required>
+                <input matInput (input)="filterOrganizacoesMilitares($event)" style="width: 100%; border-style: groove;" placeholder="Digite para filtrar">
+                <mat-option
+                  *ngFor="let om of organizacoesMilitares"
+                  [value]="om"
+                  >{{ om.nomeInstituicao }}</mat-option
+                >
+              </mat-select>
+            </mat-form-field>
+
+            <mat-form-field>
+              <mat-label>Roles</mat-label>
+              <mat-select formControlName="roles" required>
+                <mat-option
+                  *ngFor="let role of availableRoles"
+                  [value]="role"
+                  >{{ role }}</mat-option
+                >
+              </mat-select>
+            </mat-form-field>
+          </div>
+        </div>
+        <button mat-raised-button color="primary" type="submit">
+          Cadastrar
+        </button>
+      </form>
+    </div>
+  </div>
+</div>
+
+<div class="container mt-4">
+  <div class="card">
+    <div class="card-header">
+      <h5 class="mb-0">Lista de Usuários por OM</h5>
+    </div>
+    <div class="card-body">
+        <!-- Lista suspensa para selecionar a Organização Militar -->
+<mat-form-field appearance="fill" style="width: 50%;">
+    <mat-label>Selecione a Organização Militar</mat-label>
+    <mat-select [(ngModel)]="selectedOrganization">
+        <input matInput (input)="filterOrganizacoesMilitares($event)" style="width: 100%; border-style: groove;" placeholder="Digite para filtrar">
+      <mat-option *ngFor="let org of organizations" [value]="org">{{ org }}</mat-option>
+    </mat-select>
+  </mat-form-field>
+  
+  <!-- Exibir tabela de usuários apenas quando uma organização é selecionada -->
+  <div *ngIf="selectedOrganization && groupedUsers[selectedOrganization]">
+    <h3>Usuários da {{ selectedOrganization }}</h3>
+  
+    <table mat-table [dataSource]="groupedUsers[selectedOrganization]" class="mat-elevation-z8">
+  
+      <!-- Coluna Nome do Usuário -->
+      <ng-container matColumnDef="username">
+        <th mat-header-cell *matHeaderCellDef> Nome do Usuário </th>
+        <td mat-cell *matCellDef="let user"> {{ user.username }} </td>
+      </ng-container>
+  
+      <!-- Coluna Funções (Roles) -->
+      <ng-container matColumnDef="roles">
+        <th mat-header-cell *matHeaderCellDef> Funções </th>
+        <td mat-cell *matCellDef="let user">
+          <span *ngFor="let role of user.roles">{{ roleMapping[role.name] || role.name }}</span>
+        </td>
+      </ng-container>
+  
+      <!-- Coluna Ações (Excluir) -->
+      <ng-container matColumnDef="actions">
+        <th mat-header-cell *matHeaderCellDef> Ações </th>
+        <td mat-cell *matCellDef="let user">
+            <button type="button" class="btn btn-success" (click)="editUser(user)">Editar</button>
+            <span style="margin-left: 5px;"></span>
+            <button type="button" class="btn btn-danger" (click)="deleteUser(user.userId)">Excluir</button>
+        </td>
+      </ng-container>
+  
+      <!-- Linhas da Tabela -->
+      <tr mat-header-row *matHeaderRowDef="['username', 'roles', 'actions']"></tr>
+      <tr mat-row *matRowDef="let row; columns: ['username', 'roles', 'actions'];"></tr>
+    </table>
+  </div>
+    </div>
+  </div>
+</div>

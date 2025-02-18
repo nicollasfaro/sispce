@@ -1,0 +1,419 @@
+<div class="container mt-4">
+  <div class="card">
+    <div class="card-header">
+      <h5 class="mb-0">Cadastrar Novo Candidato</h5>
+    </div>
+    <div class="card-body">
+      <form [formGroup]="candidateForm">
+        <mat-tab-group [(selectedIndex)]="selectedIndex">
+          <mat-tab label="Dados Pessoais">
+            <div style="display: grid; margin-top: 10px">
+              <mat-form-field>
+                <mat-label>Nome Completo</mat-label>
+                <input matInput formControlName="fullName" required />
+                <mat-error
+                  *ngIf="candidateForm.get('fullName')?.hasError('required')"
+                >
+                  Nome completo é obrigatório
+                </mat-error>
+              </mat-form-field>
+              <mat-form-field appearance="fill">
+                <mat-label>Data de Nascimento</mat-label>
+                <input
+                  matInput
+                  [matDatepicker]="dtNasc"
+                  formControlName="dtNascimento"
+                  required
+                />
+                <mat-datepicker-toggle
+                  matIconSuffix
+                  [for]="dtNasc"
+                ></mat-datepicker-toggle>
+                <mat-datepicker #dtNasc></mat-datepicker>
+                <mat-error
+                  *ngIf="
+                    candidateForm.get('dtNascimento')?.hasError('required')
+                  "
+                >
+                  Data de Nascimento é obrigatório
+                </mat-error>
+              </mat-form-field>
+              <mat-form-field appearance="fill">
+                <mat-label>Naturalidade</mat-label>
+                <input
+                  matInput
+                  formControlName="naturalidade"
+                  type="text"
+                  required
+                />
+                <mat-error
+                  *ngIf="
+                    candidateForm.get('naturalidade')?.hasError('required')
+                  "
+                >
+                  Naturalidade é obrigatório
+                </mat-error>
+              </mat-form-field>
+              <mat-form-field appearance="fill">
+                <mat-label>Estado Cívil</mat-label>
+                <mat-select formControlName="estadoCivil" required>
+                  <mat-option value="Solteiro(a)">Solteiro(a)</mat-option>
+                  <mat-option value="Casado(a)">Casado(a)</mat-option>
+                  <mat-option value="Divorsiado(a)">Divorsiado(a)</mat-option>
+                </mat-select>
+                <!-- <input
+                  matInput
+                  formControlName="estadoCivil"
+                  type="estadoCivil"
+                  required
+                /> -->
+                <mat-error
+                  *ngIf="candidateForm.get('estadoCivil')?.hasError('required')"
+                >
+                  Estado Cívil é obrigatório
+                </mat-error>
+              </mat-form-field>
+              <mat-form-field appearance="fill">
+                <mat-label>Data da última promoção</mat-label>
+                <input
+                  matInput
+                  [matDatepicker]="dtUltPro"
+                  formControlName="dtUltPromo"
+                  required
+                />
+                <mat-datepicker-toggle
+                  matIconSuffix
+                  [for]="dtUltPro"
+                ></mat-datepicker-toggle>
+                <mat-datepicker #dtUltPro></mat-datepicker>
+                <mat-error
+                  *ngIf="candidateForm.get('dtUltPromo')?.hasError('required')"
+                >
+                  Data da última promoção é obrigatório
+                </mat-error>
+              </mat-form-field>
+            </div>
+          </mat-tab>
+          <mat-tab label="Cursos">
+            <div class="table-container" style="margin-bottom: 20px">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Curso</th>
+                    <th>Escola</th>
+                    <th>Local</th>
+                    <th>Data de Conclusão</th>
+                    <th>Grau</th>
+                    <th>Menção</th>
+                    <th>Classificação</th>
+                    <th>Ações</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let course of courses; let i = index">
+                    <td>
+                      <input
+                        [(ngModel)]="course.curso"
+                        [ngModelOptions]="{ standalone: true }"
+                        placeholder="Curso"
+                      />
+                    </td>
+                    <td>
+                      <input
+                        [(ngModel)]="course.escola"
+                        [ngModelOptions]="{ standalone: true }"
+                        placeholder="Escola"
+                      />
+                    </td>
+                    <td>
+                      <input
+                        [(ngModel)]="course.local"
+                        [ngModelOptions]="{ standalone: true }"
+                        placeholder="Local"
+                      />
+                    </td>
+                    <td>
+                      <input
+                        [(ngModel)]="course.dtConclusao"
+                        [ngModelOptions]="{ standalone: true }"
+                        placeholder="Data de Conclusão"
+                      />
+                    </td>
+                    <td>
+                      <input
+                        [(ngModel)]="course.grau"
+                        [ngModelOptions]="{ standalone: true }"
+                        placeholder="Grau" type="number"
+                      />
+                    </td>
+                    <td>
+                      <input
+                        [(ngModel)]="course.mencao"
+                        [ngModelOptions]="{ standalone: true }"
+                        placeholder="Menção" type="number"
+                      />
+                    </td>
+                    <td>
+                      <input
+                        [(ngModel)]="course.classificacao"
+                        [ngModelOptions]="{ standalone: true }"
+                        placeholder="Classificação" type="number"
+                      />
+                    </td>
+                    <td>
+                      <button mat-flat-button (click)="deleteCourse(i)">
+                        Excluir
+                      </button>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <input
+                        [(ngModel)]="newCourse.curso"
+                        [ngModelOptions]="{ standalone: true }"
+                        placeholder="Curso"
+                      />
+                    </td>
+                    <td>
+                      <input
+                        [(ngModel)]="newCourse.escola"
+                        [ngModelOptions]="{ standalone: true }"
+                        placeholder="Escola"
+                      />
+                    </td>
+                    <td>
+                      <input
+                        [(ngModel)]="newCourse.local"
+                        [ngModelOptions]="{ standalone: true }"
+                        placeholder="Local"
+                      />
+                    </td>
+                    <td>
+                      <input
+                        type="date"
+                        [(ngModel)]="newCourse.dtConclusao"
+                        [ngModelOptions]="{ standalone: true }"
+                        placeholder="Local"
+                      />
+                    </td>
+                    <td>
+                      <input
+                        [(ngModel)]="newCourse.grau"
+                        [ngModelOptions]="{ standalone: true }"
+                        placeholder="Local"
+                      />
+                    </td>
+                    <td>
+                      <input
+                        [(ngModel)]="newCourse.mencao"
+                        [ngModelOptions]="{ standalone: true }"
+                        placeholder="Local"
+                      />
+                    </td>
+                    <td>
+                      <input
+                        [(ngModel)]="newCourse.classificacao"
+                        [ngModelOptions]="{ standalone: true }"
+                        placeholder="Local"
+                      />
+                    </td>
+                    <td>
+                      <button
+                        mat-raised-button
+                        color="primary"
+                        (click)="addCourse()"
+                      >
+                        Adicionar
+                      </button>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </mat-tab>
+          <mat-tab label="Outras Informações">
+            <div style="display: grid; margin-top: 10px">
+              <mat-form-field appearance="fill">
+                <mat-label>Data de inclusão na OM</mat-label>
+                <input
+                  matInput
+                  [matDatepicker]="dtIncOM"
+                  formControlName="dtIncOM"
+                  required
+                />
+                <mat-datepicker-toggle
+                  matIconSuffix
+                  [for]="dtIncOM"
+                ></mat-datepicker-toggle>
+                <mat-datepicker #dtIncOM></mat-datepicker>
+                <mat-error
+                  *ngIf="candidateForm.get('dtIncOM')?.hasError('required')"
+                >
+                  Data de inclusão na OM é obrigatório
+                </mat-error>
+              </mat-form-field>
+              <mat-form-field appearance="fill">
+                <mat-label>Data de apresentação na OM</mat-label>
+                <input
+                  matInput
+                  [matDatepicker]="dtAprOM"
+                  formControlName="dtAprOM"
+                  required
+                />
+                <mat-datepicker-toggle
+                  matIconSuffix
+                  [for]="dtAprOM"
+                ></mat-datepicker-toggle>
+                <mat-datepicker #dtAprOM></mat-datepicker>
+                <mat-error
+                  *ngIf="candidateForm.get('dtAprOM')?.hasError('required')"
+                >
+                  Data de apresentação na OM é obrigatório
+                </mat-error>
+              </mat-form-field>
+              <mat-form-field>
+                <mat-label>Tempo de guarnição</mat-label>
+                <input
+                  matInput
+                  formControlName="tmpGuar"
+                  type="number"
+                  required
+                  maxlength="2"
+                  mask="00"
+                />
+                <mat-error
+                  *ngIf="candidateForm.get('tmpGuar')?.hasError('required')"
+                >
+                  Tempo de guarnição é obrigatório
+                </mat-error>
+              </mat-form-field>
+              <mat-form-field>
+                <mat-label>Funções desempenhadas</mat-label>
+                <input matInput formControlName="funDes" required />
+                <mat-error
+                  *ngIf="candidateForm.get('funDes')?.hasError('required')"
+                >
+                  Funções desempenhadas é obrigatório
+                </mat-error>
+              </mat-form-field>
+
+              <div style="display: grid; overflow: hidden">
+                <div style="width: 100%">
+                  <label class="example-margin"
+                    >Está designado ou matriculado em curso de especialização ou
+                    extensão de duração superior a 6 (seis) meses?</label
+                  >
+                  <mat-radio-group formControlName="naoMatriculado">
+                    <mat-radio-button class="example-margin" value="true"
+                      >Sim</mat-radio-button
+                    >
+                    <mat-radio-button class="example-margin" value="false"
+                      >Não</mat-radio-button
+                    >
+                  </mat-radio-group>
+                </div>
+                <div style="width: 100%">
+                  <label class="example-margin">Está sub-judice?</label>
+                  <mat-radio-group formControlName="judice">
+                    <mat-radio-button class="example-margin" value="true"
+                      >Sim</mat-radio-button
+                    >
+                    <mat-radio-button class="example-margin" value="false"
+                      >Não</mat-radio-button
+                    >
+                  </mat-radio-group>
+                </div>
+                <div style="width: 100%">
+                  <label class="example-margin">Inspeção de Saúde:</label>
+                  <mat-radio-group formControlName="inspSaude">
+                    <mat-radio-button class="example-margin" value="true"
+                      >Apto</mat-radio-button
+                    >
+                    <mat-radio-button class="example-margin" value="false"
+                      >Inapto</mat-radio-button
+                    >
+                  </mat-radio-group>
+                </div>
+                <div style="width: 100%">
+                  <label class="example-margin">Está movimentado?</label>
+                  <mat-radio-group formControlName="movimentado">
+                    <mat-radio-button class="example-margin" value="true"
+                      >Sim</mat-radio-button
+                    >
+                    <mat-radio-button class="example-margin" value="false"
+                      >Não</mat-radio-button
+                    >
+                  </mat-radio-group>
+                </div>
+              </div>
+              <div
+                style="
+                  display: inline-flex;
+                  width: auto;
+                  justify-content: space-between;
+                "
+              >
+                <mat-form-field style="width: 50%">
+                  <mat-label>Email</mat-label>
+                  <input
+                    matInput
+                    formControlName="contatoEmail"
+                    required
+                    placeholder="E-mail"
+                    (input)="onEmailInput()"
+                    (keydown)="onKeyDown($event)"
+                    autocomplete="off"
+                  />
+                  <mat-error
+                    *ngIf="
+                      candidateForm.get('contatoEmail')?.hasError('required')
+                    "
+                  >
+                    E-mail é obrigatório
+                  </mat-error>
+                </mat-form-field>
+                <mat-form-field style="width: 40%">
+                  <mat-label>Celular</mat-label>
+                  <input
+                    matInput
+                    formControlName="contatoCelular"
+                    required
+                    placeholder="Celular"
+                    mask="(00) 0 0000-0000"
+                  />
+                  <mat-error
+                    *ngIf="
+                      candidateForm.get('contatoCelular')?.hasError('required')
+                    "
+                  >
+                    Celular é obrigatório
+                  </mat-error>
+                </mat-form-field>
+              </div>
+            </div>
+          </mat-tab>
+        </mat-tab-group>
+
+        <button
+          mat-raised-button
+          color="primary"
+          (click)="onNext()"
+          [disabled]="isLoading"
+        >
+          {{ selectedIndex < lastIndex ? "Próximo" : "Salvar" }}
+        </button>
+      </form>
+    </div>
+  </div>
+</div>
+<!-- Dropdown de sugestões -->
+<div *ngIf="showSuggestions" class="suggestion-box">
+  <div
+    *ngFor="let domain of filteredDomains; let i = index"
+    class="suggestion-item"
+    [class.active]="i === activeSuggestion"
+    (click)="applySuggestion(domain)"
+  >
+    {{ emailBeforeAt }}{{ domain }}
+  </div>
+</div>

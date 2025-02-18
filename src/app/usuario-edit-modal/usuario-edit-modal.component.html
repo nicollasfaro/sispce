@@ -1,0 +1,40 @@
+<div style="text-align: center; padding: 20px; margin-top: 20px; width: 100%;">
+<div class="modal-header" style="text-align: center;">
+    <h3>Editar Usuário</h3>
+  </div>
+  <div class="modal-body" style="padding: 10px;">
+    <form [formGroup]="usuarioForm">
+      <!-- <mat-form-field>
+        <input matInput formControlName="nome" placeholder="Nome">
+      </mat-form-field> -->
+      <div class="form-group">
+        <label for="nome">Nome</label>
+        <input type="text" class="form-control" id="nome" formControlName="nome" placeholder="Nome">
+      </div>
+      <span style="margin-bottom: 2px;"></span>
+      <!-- <select class="form-control" formControlName="organizacaoMilitar" required>
+        <option
+          *ngFor="let om of organizacoesMilitares"
+          [value]="om"
+          >{{ om.nomeInstituicao }}</option
+        >
+      </select> -->
+      <div class="form-group">
+        <label for="oms">Organização Militar</label>
+        <mat-select class="form-control" id="oms" formControlName="organizacaoMilitar" [(ngModel)]="UserOm">
+            <input matInput (input)="filterOrganizacoesMilitares($event)" style="width: 100%; border-style: double;" placeholder="Digite para filtrar">
+            <mat-option
+            [value]="om"
+            *ngFor="let om of organizacoesMilitares"
+            >{{ om.nomeInstituicao }}</mat-option
+          >
+        </mat-select>
+      </div>
+      <!-- Outros campos que você deseja editar -->
+    </form>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-secondary" (click)="closeModal()">Cancelar</button>
+    <button type="button" class="btn btn-primary" (click)="salvarUsuario()">Salvar</button>
+  </div>
+</div>

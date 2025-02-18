@@ -1,0 +1,54 @@
+<div class="table-container">
+  <table>
+    <thead>
+      <tr>
+        <th>Curso</th>
+        <th>Escola</th>
+        <th>Local</th>
+        <th>Data de Conclusão</th>
+        <th>Grau</th>
+        <th>Menção</th>
+        <th>Classificação</th>
+        <th>Ações</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let course of courses; let i = index">
+        <td>
+          <input [(ngModel)]="course.curso" placeholder="Curso">
+        </td>
+        <td>
+          <input [(ngModel)]="course.escola" placeholder="Escola">
+        </td>
+        <td>
+          <input [(ngModel)]="course.local" placeholder="Local">
+        </td>
+        <td>
+          <input [(ngModel)]="course.dtConclusao" placeholder="Data de Conclusão">
+        </td>
+        <td>
+          <input [(ngModel)]="course.grau" placeholder="Grau">
+        </td>
+        <td>
+          <input [(ngModel)]="course.mencao" placeholder="Menção">
+        </td>
+        <td>
+          <input [(ngModel)]="course.classificacao" placeholder="Classificação">
+        </td>
+        <td>
+          <button (click)="deleteCourse(i)">Excluir</button>
+        </td>
+      </tr>
+      <tr>
+        <td><input [(ngModel)]="newCourse.curso" placeholder="Curso"></td>
+        <td><input [(ngModel)]="newCourse.escola" placeholder="Escola"></td>
+        <td><input [(ngModel)]="newCourse.local" placeholder="Local"></td>
+        <td><input type="date" [(ngModel)]="newCourse.dtConclusao" placeholder="Local"></td>
+        <td><input [(ngModel)]="newCourse.grau" placeholder="Local"></td>
+        <td><input [(ngModel)]="newCourse.mencao" placeholder="Local"></td>
+        <td><input [(ngModel)]="newCourse.classificacao" placeholder="Local"></td>
+        <td><button (click)="addCourse()">Adicionar</button></td>
+      </tr>
+    </tbody>
+  </table>
+</div>

@@ -1,0 +1,151 @@
+<div class="container mt-4">
+  <!-- Card Principal -->
+  <div class="card">
+    <div
+      class="card-header bg-secondary text-white d-flex flex-column flex-sm-row justify-content-between align-items-center"
+    >
+      <h4 class="mb-0">Detalhes da NCE Nº {{ nceDetails?.id }}</h4>
+      <button
+        class="btn btn-warning btn-sm mt-2 mt-sm-0"
+        (click)="editNce(nceDetails.nceId)"
+        style="position: absolute; right: 0; margin-right: 100px"
+      >
+        <i class="fas fa-edit"></i> Editar NCE
+      </button>
+      <button class="btn btn-light btn-sm mt-2 mt-sm-0" (click)="goBack()">
+        <i class="fas fa-arrow-left"></i> Voltar
+      </button>
+    </div>
+    <div class="card-body">
+      <div *ngIf="nceDetails; else loading">
+        <!-- Informações da NCE -->
+        <div class="row">
+          <div class="col-md-6">
+            <h5><i class="fas fa-user-graduate"></i> Posto/Perfil</h5>
+            <p>{{ nceDetails.posto }}</p>
+          </div>
+          <div class="col-md-6">
+            <h5><i class="fas fa-book"></i> Conhecimento Específico</h5>
+            <p>{{ nceDetails.conhecimentoEspacifico }}</p>
+          </div>
+        </div>
+        <hr />
+        <div class="row">
+          <div class="col-md-6">
+            <h5><i class="fas fa-lightbulb"></i> Aplicação/PAC</h5>
+            <p>{{ nceDetails.aplicacaoPac }}</p>
+          </div>
+          <div class="col-md-6">
+            <h5><i class="fas fa-university"></i> IES/Prio/Local</h5>
+            <p>{{ nceDetails.ies }}</p>
+          </div>
+        </div>
+        <hr />
+        <div class="row">
+          <div class="col-md-6">
+            <h5>
+              <i class="fas fa-lightbulb"></i> Programa/Área Concentração/ Linha
+              Pesquisa
+            </h5>
+            <p>{{ nceDetails.programaConcentacaoPesquisa }}</p>
+          </div>
+          <div class="col-md-6">
+            <h5><i class="fas fa-university"></i> Nível/Curso</h5>
+            <p>{{ nceDetails.ies }}</p>
+          </div>
+        </div>
+        <hr />
+        <div class="row">
+          <div class="col-md-6">
+            <h5><i class="fas fa-lightbulb"></i> Prio OM</h5>
+            <p>{{ nceDetails.organizacaoMilitar.nomeInstituicao }}</p>
+          </div>
+          <div class="col-md-6">
+            <h5><i class="fas fa-university"></i> Alinhamento PEEX</h5>
+            <p>
+              <span style="font-weight: bold">QEE:</span> {{ nceDetails.ies }}
+            </p>
+            <p>
+              <span style="font-weight: bold">Estratégia:</span>
+              {{ nceDetails.estrategia }}
+            </p>
+            <p>
+              <span style="font-weight: bold">Ação Estratégica:</span>
+              {{ nceDetails.objetivoEstrategico }}
+            </p>
+          </div>
+        </div>
+        <hr />
+        <div class="row">
+          <div class="col-md-6">
+            <h5><i class="fas fa-lightbulb"></i> Classificação após Curso</h5>
+            <p>{{ nceDetails.om }}</p>
+          </div>
+          <div class="col-md-6">
+            <h5><i class="fas fa-user"></i> Responsável</h5>
+            <p>{{ nceDetails.postoResponsavel }} {{ nceDetails.responsavel }}</p>
+            <p>{{ nceDetails.funcao }} {{ nceDetails.organizacaoMilitarResponsavel.nomeInstituicao }}</p>
+            <p>Contato: {{ nceDetails.cellphone }} RITEX: {{ nceDetails.ritex }}</p>
+            <p>{{ nceDetails.mail }}</p>
+          </div>
+        </div>
+        <hr />
+        <div *ngIf="candidatoDetails && candidatoDetails.length">
+          <h5><i class="fas fa-user"></i> Candidatos</h5>
+          <ul class="list-group">
+            <li
+              *ngFor="let candidato of candidatoDetails"
+              class="list-group-item d-flex justify-content-between align-items-center"
+            >
+              <div *ngIf="candidato.nceId == nceDetails.id">
+                {{ candidato.fullName }}
+              </div>
+              <button
+                target="_blank"
+                class="btn btn-danger btn-sm"
+                (click)="confirmDelete(candidato.id)"
+              >
+                <i class="fas fa-trash"></i> Excluir
+              </button>
+            </li>
+          </ul>
+          <hr />
+        </div>
+        <!-- Seção de Anexos (se houver) -->
+        <div *ngIf="nceDetails.attachments && nceDetails.attachments.length">
+          <h5><i class="fas fa-paperclip"></i> Anexos</h5>
+          <ul class="list-group">
+            <li
+              *ngFor="let attachment of nceDetails.attachments"
+              class="list-group-item d-flex justify-content-between align-items-center"
+            >
+              {{ attachment.fileName }}
+              <a
+                [href]="attachment.url"
+                download="{{ attachment.fileName }}"
+                target="_blank"
+                class="btn btn-primary btn-sm"
+              >
+                <i class="fas fa-download"></i> Baixar
+              </a>
+            </li>
+          </ul>
+        </div>
+
+        <!-- Se não houver anexos -->
+        <div *ngIf="!nceDetails.attachments || !nceDetails.attachments.length">
+          <p class="text-muted">Nenhum anexo disponível.</p>
+        </div>
+      </div>
+      <!-- Template de carregamento -->
+      <ng-template #loading>
+        <div class="text-center">
+          <div class="spinner-border text-primary" role="status">
+            <span class="visually-hidden">Carregando...</span>
+          </div>
+          <p class="mt-2">Carregando os detalhes da NCE...</p>
+        </div>
+      </ng-template>
+    </div>
+  </div>
+</div>

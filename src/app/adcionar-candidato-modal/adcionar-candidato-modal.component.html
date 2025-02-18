@@ -1,0 +1,18 @@
+<div style="text-align: center; padding: 5px; margin-top: 20px;">
+    
+    <h3>Incluir Candidato</h3>
+</div>
+<div style="text-align: center;">
+    <mat-form-field appearance="fill" style="width: 80%;">
+      <mat-label>Selecionar Candidato</mat-label>
+      <mat-select [(value)]="selectedCandidate">
+        <mat-option *ngFor="let candidate of candidates" [value]="candidate">
+          {{ candidate.fullName }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+</div>
+<div style="text-align: center; padding: 5px; margin-top: 20px;">
+    <button mat-raised-button color="primary" (click)="addCandidateToCourse(course)">Incluir</button>
+    <button mat-button (click)="close()">Cancelar</button>
+</div>

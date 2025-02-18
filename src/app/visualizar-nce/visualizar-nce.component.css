@@ -1,0 +1,6 @@
+/* Centralizar o botão de voltar em telas menores */
+@media (max-width: 576px) {
+    .card-header .btn {
+      margin-top: 10px;
+    }
+  }
